@@ -6,6 +6,9 @@
     <title>Bloom Filters</title>
     <link rel="stylesheet" href="/static/css/index.css">
 </head>
+<script type="module" src="/static/js/index.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js" integrity="sha512-bLwLr3lzJN1cvtbClBMhKDyaD0uocWmphiqO8v0w3/z/XqUwzkM00gZq7BV3dQS9mQu0rarZMTsxlcnIHszElA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <body>
     <nav class="nav">
         <a href="/" class="nav__link" data-link>Bloom Filters</a>
@@ -13,6 +16,65 @@
         <a href="/settings" class="nav__link" data-link>Settings</a>
     </nav>
     <div id="app"></div>
-    <script type="module" src="/static/js/index.js"></script>
+    <div id="container">
+        <h1>Bloom Filters</h1>
+        <div id="description">
+            A bloom filter is...
+        </div>
+        <p>In Ethereum we have a 2048 bits filter. It takes the first (least-significant) 11 bits of the KECCAK-2561 of the transaction address and indexed topics.</p>
+        <h2>Bloom Filter</h2>
+        <table id="vector">
+            <tbody>
+                <tr>
+                    <td id="cell0" width="50"></td>
+                    <td id="cell1" width="50"></td>
+                    <td id="cell2" width="50"></td>
+                    <td id="cell3" width="50"></td>
+                    <td id="cell4" width="50"></td>
+                    <td id="cell5" width="50"></td>
+                    <td id="cell6" width="50"></td>
+                    <td id="cell7" width="50"></td>
+                    <td id="cell8" width="50"></td>
+                    <td id="cell9" width="50"></td>
+                    <td id="cell10" width="50"></td>
+                    <td id="cell11" width="50"></td>
+                    <td id="cell12" width="50"></td>
+                </tr>
+                <tr>
+                    <td id="cell0" width="50">0</td>
+                    <td id="cell1" width="50">1</td>
+                    <td id="cell2" width="50">2</td>
+                    <td id="cell3" width="50">3</td>
+                    <td id="cell4" width="50">4</td>
+                    <td id="cell5" width="50">5</td>
+                    <td id="cell6" width="50">6</td>
+                    <td id="cell7" width="50">7</td>
+                    <td id="cell8" width="50">8</td>
+                    <td id="cell9" width="50">9</td>
+                    <td id="cell10" width="50">10</td>
+                    <td id="cell11" width="50">11</td>
+                    <td id="cell12" width="50">12</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>Your current set</p>
+        <p id="set"></p>
+        <div id="add">
+            <h3>Add an event</h3>
+            <p>Example: Transfer(address indexed _from, address indexed _to, uint256 _value)</p>
+            <div>
+                <input type="text" id="add-event" value="Transfer(address,address,uint256)">
+            </div>
+            <p>Event Hash: </p>
+            <p id="hexValue"></p>
+            <div>
+                <button type="submit">Add Event</button>
+            </div>
+        </div>
+
+        <div id="check">
+            <h3>Search for an element</h3>
+        </div>
+    </div>
 </body>
 </html>
