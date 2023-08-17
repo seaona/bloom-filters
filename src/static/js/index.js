@@ -1,13 +1,34 @@
 const ethers = window.ethers;
-const body = document.querySelector('body');
 
 /* Event listeners */
-body.onload = toHex;
+window.addEventListener('load', toHex);
 document.getElementById("add-event").addEventListener('change', toHex);
 
 /* Functions */
-async function toHex() {
+function toHex() {
     const eventName = document.getElementById("add-event").value;
     const hash = ethers.id(eventName);
     document.getElementById("hexValue").innerHTML = hash;
+}
+
+function addToBloomFilter(element) {
+
+}
+
+function isInBloomFilter(element) {
+    const a = ;
+    const b = ;
+    const c = ;
+
+    let result = document.getElementById("result");
+    
+    if (
+        a == 'in-set' &&
+        b == 'in-set' &&
+        c == 'in-set'
+    ) {
+        result.innerHTML = 'Might be in the set.'
+    } else {
+        result.innerHTML = 'Definetly not in the set.'
+    }
 }

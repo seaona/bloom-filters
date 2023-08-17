@@ -11,18 +11,27 @@
 
 <body>
     <nav class="nav">
+        <a href="/ethereum" class="nav__link" data-link>Bloom Filters in Ethereum</a>
         <a href="/" class="nav__link" data-link>Bloom Filters</a>
-        <a href="/posts" class="nav__link" data-link>Posts</a>
-        <a href="/settings" class="nav__link" data-link>Settings</a>
     </nav>
     <div id="app"></div>
     <div id="container">
         <h1>Bloom Filters</h1>
         <div id="description">
-            A bloom filter is...
+            A bloom filter is a space-efficient probabilistic data structure used to test whether an element is a member of a set. Possible results:
         </div>
-        <p>In Ethereum we have a 2048 bits filter. It takes the first (least-significant) 11 bits of the KECCAK-2561 of the transaction address and indexed topics.</p>
-        <h2>Bloom Filter</h2>
+        <ul>
+            <li>Possibly in the set</li>
+            <li>Definetly not in the set</li>
+        </ul>
+        <p>In Ethereum, each block has a bloom filter, `logsBloom`, which contains the address of any logging contract and its indexed fields from the logs generated</p>
+        <p>Every bloom filter is a 2048 bit string (512 hex chars). See example of `logsBloom` in block `17932776`:</p>
+        <pre>
+        "0x6931135cc5a6515f5e59469cc06c26f1f4885aa6800c7f88281fe42bf22dcf982020a9ddc24f4235f491734ced1873a476b124c79caefb064c35193ee1682bbcae46c888d359283ca98a601ada6c0b2ca05d2442be62ce0b0287e64caa35cc05770f251da7120c3bb8e08870ea48be5bca1aa88c145b45b89e24e55cd06ef2be0f9820c61c835921b15c08640713d44e582a6855f9e5963c2a211cefa5fa901ccbed1164cea763e3215e67c4bd880c466c634c664170c50740c9f9aaa0288a7ae5b2148314ceda62a50b0a26b729ba833875ca487f7efa1e1815429e10e0af6857baa95caddacd915fd51be8a1bd9c8e9526f2797baab97c4125a8669890fc31"
+        </pre>
+        <p>Every log that is emitted in a transaction has 0-4 topics. Each topic will set 3 bits to `1` based on the hash of the topic.</p>
+        <p>It takes the first (least-significant) 11 bits of the KECCAK-2561 of the transaction address and indexed topics.</p>
+        <h2>Your Bloom Filter</h2>
         <table id="vector">
             <tbody>
                 <tr>
@@ -57,14 +66,11 @@
                 </tr>
             </tbody>
         </table>
-        <p>Your current set</p>
+        <p>Your current set:</p>
         <p id="set"></p>
         <div id="add">
             <h3>Add an event</h3>
-            <p>Example: Transfer(address indexed _from, address indexed _to, uint256 _value)</p>
-            <div>
-                <input type="text" id="add-event" value="Transfer(address,address,uint256)">
-            </div>
+            <input type="text" id="add-event" value="Transfer(address,address,uint256)">
             <p>Event Hash: </p>
             <p id="hexValue"></p>
             <div>
@@ -74,6 +80,15 @@
 
         <div id="check">
             <h3>Search for an element</h3>
+            <p>If you want to know whether a block or a transaction has a given tpic in one of its logs, you can check to see if those same 3 bits are set.</p>
+            <input type="text" id="search-event" value="Transfer(address,address,uint256)">
+            <p>Event Hash: </p>
+            <p id="hexValue"></p>
+            <div>
+                <button type="submit">Search Event</button>
+            </div>
+            <div>Result</div>
+            <p id="result"></p>
         </div>
     </div>
 </body>
