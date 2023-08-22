@@ -133,6 +133,14 @@ pre {
     padding: 15px;
     color: #333;
     font-style: italic;
-    font-size: 16px;
-    
+    font-size: 16px;   
 }
+
+.row {
+    display: flex;
+  }
+  
+.column {
+    flex: 50%;
+    margin: 3px;
+  }

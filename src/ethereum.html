@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bloom Filters</title>
+    <link rel="stylesheet" href="/static/css/index.css">
+</head>
+<script type="text/javascript" src="/static/js/ethereum.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js" integrity="sha512-bLwLr3lzJN1cvtbClBMhKDyaD0uocWmphiqO8v0w3/z/XqUwzkM00gZq7BV3dQS9mQu0rarZMTsxlcnIHszElA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<body>
+    <nav class="nav">
+        <a href="/ethereum" class="nav__link" data-link>Bloom Filters in Ethereum</a>
+        <a href="/" class="nav__link" data-link>Bloom Filters</a>
+    </nav>
+    <div id="app"></div>
+    <div id="container">
+        <h1>Bloom Filters</h1>
+        <p>In Ethereum, each block has a bloom filter, `logsBloom`, which contains the address of any logging contract and its indexed fields from the logs generated</p>
+        <p>Every bloom filter is a 2048 bit string (512 hex chars).</p>
+        <h2>Get logsBloom from a Block</h2>
+        <p>Firs let's get the logsBloom value for a specific block. In this case, we are going to work with block `17968337`, which is `0x1122CD1` in hex.</p>
+        <p>Make an RPC request to an Ethereum node (you can use Infura or Quicknode) using the `eth_getBlockByNumber` method</li>
+
+        <div class="row">
+            <div class="column">
+                <p>Request</p>
+                <pre>curl --location 'https://YOUR_ETHEREUM_PROVIDER' \
+            --header 'Content-Type: text/plain' \
+            --data '{
+                "jsonrpc": "2.0",
+                "method": "eth_getBlockByNumber",
+                "params": [
+                    "0x1122CD1",
+                    false
+                ],
+                "id": 0
+                }'
+                </pre>
+                <button onclick="makeRequest()">Make Request</button>
+            </div>
+            <div class="column">
+                <p>Response</p>
+                <pre id="response"></pre>
+            </div>
+        </div>
+        
+     <h2>Check if a Topic is present</h2>
+        <p>Now we are going to check if the followin topic is present:</p>
+        <pre>SafeReceived (index_topic_1 address sender, uint256 value)</pre>
+        <p>We need to get the signature for this event, which it will be the keccak256 of the event (without spaces and var names)</p>
+        <pre>SafeReceived(address,uint256)</pre>
+        <button onclick="getKeccak()">Get Signature</button>
+        <pre id="keccak"></pre>
+    </div>
+</body>
+</html>
