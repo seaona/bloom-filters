@@ -25,49 +25,33 @@
             <li>Definetly not in the set</li>
         </ul>
         <h2>Your Bloom Filter</h2>
-        <table id="vector">
-            <tbody>
-                <tr>
-                    <td id="cell0" width="50"></td>
-                    <td id="cell1" width="50"></td>
-                    <td id="cell2" width="50"></td>
-                    <td id="cell3" width="50"></td>
-                    <td id="cell4" width="50"></td>
-                    <td id="cell5" width="50"></td>
-                    <td id="cell6" width="50"></td>
-                    <td id="cell7" width="50"></td>
-                    <td id="cell8" width="50"></td>
-                    <td id="cell9" width="50"></td>
-                    <td id="cell10" width="50"></td>
-                    <td id="cell11" width="50"></td>
-                    <td id="cell12" width="50"></td>
-                </tr>
-                <tr>
-                    <td id="cell0" width="50">0</td>
-                    <td id="cell1" width="50">1</td>
-                    <td id="cell2" width="50">2</td>
-                    <td id="cell3" width="50">3</td>
-                    <td id="cell4" width="50">4</td>
-                    <td id="cell5" width="50">5</td>
-                    <td id="cell6" width="50">6</td>
-                    <td id="cell7" width="50">7</td>
-                    <td id="cell8" width="50">8</td>
-                    <td id="cell9" width="50">9</td>
-                    <td id="cell10" width="50">10</td>
-                    <td id="cell11" width="50">11</td>
-                    <td id="cell12" width="50">12</td>
-                </tr>
-            </tbody>
+        <table id="bloomTable">
+            <tr>
+            </tr>
         </table>
-        <p>Your current set:</p>
+
+        <label for="entry">Enter a string:</label>
+        <input type="text" id="entry">
+        <button id="addToBloom">Add to Bloom Filter</button>
+        <br>
+        <label for="search">Search for a string:</label>
+        <input type="text" id="search">
+        <button id="searchButton">Search</button>
+        <p id="searchResult" class="search-result"></p>
+        <table id="bloomTable">
+          <tr>
+          </tr>
+        </table>
+
+        <p>Current Set: <span id="currentSet"></span></p>
         <p id="set"></p>
         <div id="add">
             <h3>Add an event</h3>
-            <input type="text" id="add-event" value="Transfer(address,address,uint256)">
+            <input type="text" id="input-event" value="Transfer(address,address,uint256)">
             <p>Event Hash: </p>
             <p id="hexValue"></p>
             <div>
-                <button type="submit">Add Event</button>
+                <button id="add-event" type="submit">Add Event</button>
             </div>
         </div>
 

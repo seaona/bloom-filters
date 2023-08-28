@@ -1,48 +1,173 @@
 const ethers = window.ethers;
 
 /* Event listeners */
-window.addEventListener('load', toHex);
-//document.getElementById("add-event").addEventListener('change', toHex);
+window.onload=function(){
+    getSignature();
+    createEmptyBloom();
+    updateCurrentSet();
+}
+
+document.getElementById("input-event").addEventListener('input', getSignature);
+document.getElementById("add-event").addEventListener('submit', addToBloomFilter);
 
 /* Functions */
-function makeRequest() {
-    document.getElementById("response").innerHTML = "0x28f531fec2a6ea4250baf66ef6353f3b313fcc45fe13715436dbf22cd064805640c04967c8924a984579d50e6a5d8581623d99b8baabbf42f4b79c15f07b7144a24a261d650619e8f8d6432a482a28ba8c157d2796403828dd5abedc92a0e9e842cf110c1a82432f0c4d54e99db29825c29bacc12201d62008952d9cd37d3b00274a235e04b1dc6899e9050cc3b65f502486462da95924f9523d43d742ba9e88daaf5f5ffbb37e111c83c8f59d933c9c2676028e6f2f977a2d8c9b5e81685c10754c1cb28c640b0276d158746c82d3eec6581e4963bb3054500d706fc523a528bfb0b8fbc501e4ed12cdc097218d112a8073f1123b2d86c400e5fbb3fcf77c4f";
+function getSignature() {
+    const eventName = document.getElementById("input-event").value;
+    const hash = ethers.id(eventName);
+    document.getElementById("hexValue").innerHTML = hash;
+    hexToBytes(hash)
 }
 
-function toHex() {
-    //const eventName = document.getElementById("add-event").value;
-    //const hash = ethers.id(eventName);
-    //document.getElementById("hexValue").innerHTML = hash;
+function hexToBytes(hex) {
+    let bytes = [];
+    for (let c = 2; c < hex.length; c += 2)
+        bytes.push(parseInt(hex.substr(c, 2), 16).toString(2));
+    console.log(bytes)
+    return bytes;
 }
 
-function getKeccak() {
+
+function getBits(elem) {
+    const hash = '1101110111110010'
+}
+
+function addToBloom() {
     const str = ethers.toUtf8Bytes('SafeReceived(address,uint256)')
     const hash = ethers.id(str);
     console.log(hash)
     document.getElementById("keccak").innerHTML = hash;
 }
 
-function addToBloomFilter(element) {
+function addToBloomFilter(filter, element) {
+    const hash = ethers.keccak256(element);
 
+    for (let idx = 0; idx < 5; idx += 2) {
+      // Obtain the least significant 11 bits from the pair of bytes
+      // (16 bits), and set this bit in bloom array.
+      // The obtained bit is 0-indexed in the bloom filter from the least
+      // significant bit to the most significant bit.
+      const bit_to_set = (hash[idx] << 8) | hash[idx + 1];
+      const bit_index = 0x07FF - (bit_to_set & 0x07FF);
+  
+      const byte_index = Math.floor(bit_index / 8);
+      const bit_value = 1 << (7 - (bit_index % 8));
+      filter[byte_index] |= bit_value;
+    }
 }
 
 
-
-
-/* function isInBloomFilter(element) {
-    const a = ;
-    const b = ;
-    const c = ;
-
-    let result = document.getElementById("result");
-    
-    if (
-        a == 'in-set' &&
-        b == 'in-set' &&
-        c == 'in-set'
-    ) {
-        result.innerHTML = 'Might be in the set.'
-    } else {
-        result.innerHTML = 'Definetly not in the set.'
+function stringToBytes(str) {
+  var ch, st, re = [];
+  for (var i = 0; i < str.length; i++) {
+    ch = str.charCodeAt(i);  // get char
+    st = [];                 // set up "stack"
+    do {
+      st.push( ch & 0xFF );  // push byte to stack
+      ch = ch >> 8;          // shift value down by 1 byte
     }
-} */
+    while ( ch );
+    // add stack contents to result
+    // done because chars have "wrong" endianness
+    re = re.concat( st.reverse() );
+  }
+ // return an array of bytes
+  return re;
+}
+
+const bloomSize = 3;
+const bloom = new Uint8Array(bloomSize);
+let currentSet = [];
+
+function createEmptyBloom() {
+    const bloomTable = document.getElementById("bloomTable");
+    const row = bloomTable.querySelector("tr");
+    for (let i = 0; i < bloomSize * 8; i++) {
+      const cell = document.createElement("td");
+      row.appendChild(cell);
+    }
+}
+
+
+    // Create the table cells for the bloom filter bits
+
+
+    function updateBloomTable() {
+        const bloomTable = document.getElementById("bloomTable");
+        const cells = bloomTable.querySelectorAll("td");
+        for (let i = 0; i < bloomSize * 8; i++) {
+            const byteIndex = Math.floor(i / 8);
+            const bitIndex = i % 8;
+            const bitMask = 1 << (7 - bitIndex);
+            if (bloom[byteIndex] & bitMask) {
+                cells[i].classList.add("set");
+            } else {
+            cells[i].classList.remove("set");
+        }
+      }
+    }
+
+    function add_to_bloom(bloom_entry) {
+        const hash = ethers.keccak256(bloom_entry);
+        for (let idx = 0; idx < 3; idx++) {
+            const bit_to_set = hash[idx];
+            const bit_index = 0x07 - (bit_to_set & 0x07);
+            const byte_index = Math.floor(bit_index / 8);
+            const bit_value = 1 << (7 - (bit_index % 8));
+            bloom[byte_index] |= bit_value;
+
+            const bit_string = byte_index * 8 + (7 - (bit_index % 8));
+            currentSet.push(bit_string);
+        }
+      updateBloomTable();
+      updateCurrentSet();
+
+    }
+
+    function updateCurrentSet() {
+        const currentSetElement = document.getElementById("currentSet");
+        currentSetElement.textContent = currentSet.join(", ");
+      }
+
+    function is_in_bloom(bloom_entry) {
+      const hash = ethers.keccak256(bloom_entry);
+
+      for (let idx = 0; idx < 3; idx++) {
+        const bit_to_check = hash[idx];
+        const bit_index = 0x07 - (bit_to_check & 0x07);
+
+        const byte_index = Math.floor(bit_index / 8);
+        const bit_value = 1 << (7 - (bit_index % 8));
+        if ((bloom[byte_index] & bit_value) === 0) {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    const addToBloomButton = document.getElementById("addToBloom");
+    addToBloomButton.addEventListener("click", () => {
+      const entryInput = document.getElementById("entry");
+      const entry = entryInput.value;
+      if (entry) {
+        const entryBytes = new TextEncoder().encode(entry);
+        add_to_bloom(entryBytes);
+      }
+    });
+
+    const searchButton = document.getElementById("searchButton");
+    const searchResult = document.getElementById("searchResult");
+    searchButton.addEventListener("click", () => {
+      const searchInput = document.getElementById("search");
+      const searchEntry = searchInput.value;
+      if (searchEntry) {
+        const searchBytes = new TextEncoder().encode(searchEntry);
+        const exists = is_in_bloom(searchBytes);
+        if (exists) {
+          searchResult.textContent = "Possibly in bloom filter";
+        } else {
+          searchResult.textContent = "Definitely not in bloom filter";
+        }
+      }
+    });
+

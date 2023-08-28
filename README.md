@@ -17,3 +17,4 @@ In my explorations about bloom filters I made a simple proof of concept for repr
 - https://github.com/joshstevens19/ethereum-bloom-filters
 - https://github.com/pipermerriam/eth-bloom/blob/master/eth_bloom/bloom.py
 - https://ethereum.github.io/execution-specs/autoapi/ethereum/frontier/bloom/index.html
+- https://ethereum.stackexchange.com/questions/142703/how-can-i-parse-an-ethereum-block-level-logsbloom
