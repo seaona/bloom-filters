@@ -120,23 +120,22 @@ button:hover {
 }
 
 pre {
-    white-space: pre-wrap;       /* Since CSS 2.1 */
-    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-    white-space: -pre-wrap;      /* Opera 4-6 */
-    white-space: -o-pre-wrap;    /* Opera 7 */
-    word-wrap: break-word;    
     background-color:  rgba(204, 204, 204, 0.2);
     padding: 15px;
     color: #333;
     font-style: italic;
-    font-size: 16px;   
+    font-size: 16px;
+    display: flex;
+    white-space: normal;
+    word-break: break-word;
 }
 
 .row {
     display: flex;
-  }
+}
   
 .column {
     flex: 50%;
     margin: 3px;
-  }
+    flex-wrap: wrap !important;
+}
